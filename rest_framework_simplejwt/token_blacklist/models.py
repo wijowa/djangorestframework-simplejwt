@@ -8,11 +8,11 @@ class OutstandingToken(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True
     )
 
-    jti = models.CharField(unique=True, max_length=255)
+    jti = models.CharField(unique=True, max_length=255, db_index=True)
     token = models.TextField()
 
     created_at = models.DateTimeField(null=True, blank=True)
-    expires_at = models.DateTimeField()
+    expires_at = models.DateTimeField(db_index=True)
 
     class Meta:
         # Work around for a bug in Django:
@@ -36,7 +36,7 @@ class BlacklistedToken(models.Model):
     id = models.BigAutoField(primary_key=True, serialize=False)
     token = models.OneToOneField(OutstandingToken, on_delete=models.CASCADE)
 
-    blacklisted_at = models.DateTimeField(auto_now_add=True)
+    blacklisted_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
         # Work around for a bug in Django:
